@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/app.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Hello, welcome to this mood tracking website.</h1>
+      <h3>Enter your name and mood.</h3>
+      <form action="submit_page" method="post">
+        <input
+          type="text"
+          name="username"
+          required
+          placeholder="Enter you name"
+        />
+        <br />
+        <label class="mood-label">
+          How are you feeling on a scale of 1 to 5?
+        </label>
+        <br />
+        <div id="radio-container">
+          <input type="radio" name="mood" id="rd1" value="1" />
+          <label for="rd1">1</label>
+          <input type="radio" name="mood" id="rd2" value="2" />
+          <label for="rd2">2</label>
+          <input type="radio" name="mood" id="rd3" value="3" />
+          <label for="rd3">3</label>
+          <input type="radio" name="mood" id="rd4" value="4" />
+          <label for="rd4">4</label>
+          <input type="radio" name="mood" id="rd5" value="5" />
+          <label for="rd5">5</label>
+        </div>
+        <button type="submit" class="fill">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
