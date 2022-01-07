@@ -7,8 +7,9 @@ from sqlalchemy.sql.functions import count
 import datetime
 import psycopg2
 import pandas as pd
-from bokeh.plotting import figure, show
-from bokeh.embed import components
+import json
+import plotly
+import plotly.express as px
 
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://new:123@localhost/mood_logger'
@@ -53,13 +54,23 @@ def submit():
         db.session.commit()
         # Average ratings per day
         df["Day"] = df[(df['name']==name)]['timestamp'].dt.date
+        global day_avg
         day_avg=df.groupby(['Day']).mean()
-        plot = figure(plot_width=400, plot_height=400,title=None, toolbar_location="below")
-        plot.line(day_avg.index,day_avg['mood'])
-        script, div = components(plot)  
-        kwargs = {'script': script, 'div': div}
-        kwargs['title'] = 'bokeh-with-flask'
-        return render_template("submit_page.html", **kwargs)
+        global df2 
+        df2 = df[df['name']==name].groupby(['mood']).mean().reset_index()
+        return render_template("submit_page.html")
+
+@app.route('/pie')
+def pie_data():
+    fig_pie = px.pie(df2, values='id', names='mood')
+    graphJSON = json.dumps(fig_pie, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template("pie.html", graphJSON=graphJSON)
+
+@app.route('/line')
+def line_data():
+    fig_line=px.line(day_avg,y="mood",title="Your average mood daily")
+    graphJSON = json.dumps(fig_line, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template("pie.html", graphJSON=graphJSON)
 
 if __name__=="__main__":
     app.debug=True
